@@ -17,10 +17,10 @@ class CannotParseIPException(ValueError):
 
 def decodeBits(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	if net.network.is_multicast:   return 'Multicast'
-	if net.network.is_private:     return 'Private'
 	if net.network.is_unspecified: return 'Unspecified'
 	if net.network.is_loopback:    return 'Loopback'
 	if net.network.is_link_local:  return 'Link local'
+	if net.network.is_private:     return 'Private'
 	return 'Global'
 
 
