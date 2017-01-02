@@ -2,6 +2,7 @@
 
 import sys, argparse, ipaddress as IP
 from typing import Any, List
+from termcolor import colored
 
 
 class TooManyException(ValueError):
@@ -28,13 +29,19 @@ def formatKeyVal(key: str, value: object, pre: str = '') -> str:
 		pre = pre,
 		padding = 15,
 		key = str(key),
-		value = str(value))
+		value = colored(str(value), 'red', attrs = ['bold'])
+	)
 
 
 def format_network(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	res = ''
 
-	res += '[IPv{version} Network] {type} address\n'.format(version = net.version, type = decodeBits(net))
+	if net.version == 4:
+		colored_version = colored('4', 'magenta')
+	else:
+		colored_version = colored('6', 'green')
+
+	res += '[IPv{version} Network] {type} address\n'.format(version = colored_version, type = decodeBits(net))
 	res += formatKeyVal('IP address', net.ip)
 	res += formatKeyVal('Network address', net.network)
 
