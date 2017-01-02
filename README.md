@@ -42,7 +42,7 @@ Other alternate supported inputs:
 
 ## Exit codes
 
-0. Clean exit
-1. Cannot parse IP
-2. List called with more than 2^8 IPs and not --force
-3. Called with -h (help)
+* 0: Clean exit
+* 1: Cannot parse IP
+* 2: List called with more than 2^8 IPs and not --force
+* 3: Called with -h (help)
