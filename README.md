@@ -33,16 +33,16 @@ Input: `2001:db8::abcd:1234`
 
 Other alternate supported inputs:
 
-- 192.0.2.0 (works like a /32)
-- 192.0.2.0 255.255.255.0
-- 192.0.2.0/255.255.255.0
-- 2001:db8:: (works like a /128)
-- 2001:db8::/64
-- -l 192.0.2.0/28 (just lists all the IPs in the subnet (handy for loops))
+- `192.0.2.0` (works like a /32)
+- `192.0.2.0 255.255.255.0`
+- `192.0.2.0/255.255.255.0`
+- `2001:db8::` (works like a /128)
+- `2001:db8::/64`
+- `-l 192.0.2.0/28` (just lists all the IPs in the subnet (handy for loops))
 
 ## Exit codes
 
-- 0: Clean exit
-- 1: Cannot parse IP
-- 2: List called with more than 2^8 IPs and not --force
-- 3: Called with -h (help)
+0. Clean exit
+1. Cannot parse IP
+2. List called with more than 2^8 IPs and not --force
+3. Called with -h (help)
