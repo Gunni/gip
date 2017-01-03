@@ -72,19 +72,17 @@ def list_ips(net: [IP.IPv4Interface, IP.IPv6Interface], force: bool) -> [IP.IPv4
 
 
 def parse_args(args: List[str]) -> List[Any]:
-	del args[0]
+	parser = argparse.ArgumentParser(
+		description = 'Parse an IP address of any version and display useful information about it.')
+	parser.add_argument('ip', nargs = '+', help = 'An IPv4 or IPv6 address or subnet')
+	parser.add_argument('--list', '-l', action = 'store_true', help = 'Just list all the IPs in the subnet')
+	parser.add_argument('--force', action = 'store_true', help = 'Force list all ips for large subnets')
 
-	try:
-		parser = argparse.ArgumentParser(
-			description = 'Parse an IP address of any version and display useful information about it.')
-		parser.add_argument('ip', nargs = '*', help = 'An IPv4 or IPv6 address or subnet')
-		parser.add_argument('--list', '-l', action = 'store_true', help = 'Just list all the IPs in the subnet')
-		parser.add_argument('--force', action = 'store_true', help = 'Force list all ips for large subnets')
-		args = parser.parse_args(args)
-	except SystemExit:  # just to make sure it exits uncleanly on -h
-		sys.exit(3)
+	return parser.parse_args(args[1:])
 
-	return args
+
+def combine_args(values: List[str]) -> str:
+	return '/'.join(values)
 
 
 def parse_ip(arg: str) -> [IP.IPv4Interface, IP.IPv6Interface]:
@@ -96,7 +94,7 @@ def parse_ip(arg: str) -> [IP.IPv4Interface, IP.IPv6Interface]:
 
 if __name__ == '__main__':
 	args = parse_args(sys.argv)
-	arg = '/'.join(args.ip)
+	arg = combine_args(args.ip)
 
 	try:
 		subnet = parse_ip(arg)
@@ -106,7 +104,9 @@ if __name__ == '__main__':
 
 	if args.list:
 		try:
-			print(list_ips(subnet, args.force))
+			n = list_ips(subnet, args.force)
+			for ip in n:
+				print(ip)
 			sys.exit(0)
 		except TooManyException as e:
 			sys.stderr.write(str(e))
