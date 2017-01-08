@@ -112,4 +112,4 @@ if __name__ == '__main__':
 			sys.stderr.write(str(e))
 			sys.exit(2)
 
-	print(format_network(subnet))
+	print(format_network(subnet), end = '')
