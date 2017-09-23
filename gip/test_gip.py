@@ -1,5 +1,6 @@
-import pytest as test
 import gip
+
+import pytest as test
 import re
 from typing import Any, List
 from termcolor import colored
@@ -113,8 +114,8 @@ def test_parse_args_empty(capsys) -> None:
 	capsys.disabled()
 
 	assert err is not None
-	assert err == 'usage: pytestrunner.py [-h] [--list] [--force] ip [ip ...]\n' \
-	              'pytestrunner.py: error: the following arguments are required: ip\n'
+	assert err == 'usage: pytest [-h] [--list] [--force] ip [ip ...]\n' \
+	              'pytest: error: the following arguments are required: ip\n'
 
 
 def test_parse_args() -> None:
