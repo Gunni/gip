@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
 
 import sys, argparse, ipaddress as IP
-from typing import Any, List
-from termcolor import colored
-
+from colorclass import Color
 
 class TooManyException(ValueError):
-	def __init__(self):
-		super(TooManyException, self).__init__('> 2^8 (256) addresses, refusing to print, force with --force\n')
-
+	def __init__(self) -> ValueError:
+		super(TooManyException, self).__init__('> 2^8 (256) addresses, refusing to print, force with --force')
 
 class CannotParseIPException(ValueError):
-	def __init__(self, message):
+	def __init__(self, message) -> ValueError:
 		super(CannotParseIPException, self).__init__(message)
-
 
 def decodeBits(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	if net.network.is_multicast:   return 'Multicast'
@@ -23,23 +19,21 @@ def decodeBits(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	if net.network.is_private:     return 'Private'
 	return 'Global'
 
-
 def formatKeyVal(key: str, value: object, pre: str = '') -> str:
 	return '{pre}{key: <{padding}} - {value}\n'.format(
 		pre = pre,
 		padding = 15,
 		key = str(key),
-		value = colored(str(value), 'red', attrs = ['bold'])
+		value = Color('{red}{}{/red}').format(value)
 	)
-
 
 def format_network(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	res = ''
 
 	if net.version == 4:
-		colored_version = colored('4', 'magenta')
+		colored_version = Color('{magenta}4{/magenta}')
 	else:
-		colored_version = colored('6', 'green')
+		colored_version = Color('{green}6{/green}')
 
 	res += '[IPv{version} Network] {type} address\n'.format(version = colored_version, type = decodeBits(net))
 	res += formatKeyVal('IP address', net.ip)
@@ -63,15 +57,13 @@ def format_network(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 
 	return res
 
-
 def list_ips(net: [IP.IPv4Interface, IP.IPv6Interface], force: bool) -> [IP.IPv4Network, IP.IPv6Network]:
 	if net.network.num_addresses > 2 ** 8 and force == False:
 		raise TooManyException()
 
 	return net.network
 
-
-def parse_args(args: List[str]) -> List[Any]:
+def parse_args(args):
 	parser = argparse.ArgumentParser(
 		description = 'Parse an IP address of any version and display useful information about it.')
 	parser.add_argument('ip', nargs = '+', help = 'An IPv4 or IPv6 address or subnet')
@@ -81,7 +73,7 @@ def parse_args(args: List[str]) -> List[Any]:
 	return parser.parse_args(args[1:])
 
 
-def combine_args(values: List[str]) -> str:
+def combine_args(values) -> str:
 	return '/'.join(values)
 
 
@@ -99,7 +91,7 @@ if __name__ == '__main__':
 	try:
 		subnet = parse_ip(arg)
 	except CannotParseIPException as e:
-		sys.stderr.write(str(e))
+		print(e)
 		sys.exit(1)
 
 	if args.list:
@@ -109,7 +101,7 @@ if __name__ == '__main__':
 				print(ip)
 			sys.exit(0)
 		except TooManyException as e:
-			sys.stderr.write(str(e))
+			print(e)
 			sys.exit(2)
 
 	print(format_network(subnet), end = '')

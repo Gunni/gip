@@ -2,9 +2,8 @@ import gip
 
 import pytest as test
 import re
-from typing import Any, List
-from termcolor import colored
 import ipaddress as IP
+from colorclass import Color
 
 
 def _bits(net, expected) -> None:
@@ -39,8 +38,8 @@ def _key_val(inputA: str, inputB: object, inputC: str, expected: str) -> None:
 	assert n == expected
 
 
-def _key_val_color(value: str) -> str:
-	return colored(str(value), 'red', attrs = ['bold'])
+def _key_val_color(value) -> str:
+	return Color('{red}{}{/red}').format(value)
 
 
 def test_format_key_val() -> None:
@@ -92,7 +91,7 @@ def test_list_ips_v6() -> None:
 		n[512]
 
 
-def _parse_args(expectedList: bool, expectedForce: bool, expectedIP: List[str], args: List[Any]) -> None:
+def _parse_args(expectedList: bool, expectedForce: bool, expectedIP, args) -> None:
 	l = ['A:/Development/gip/gip.py']
 	l += args
 	n = gip.parse_args(l)
@@ -114,8 +113,8 @@ def test_parse_args_empty(capsys) -> None:
 	capsys.disabled()
 
 	assert err is not None
-	assert err == 'usage: pytest [-h] [--list] [--force] ip [ip ...]\n' \
-	              'pytest: error: the following arguments are required: ip\n'
+	assert err == 'usage: pytest.py [-h] [--list] [--force] ip [ip ...]\n' \
+	              'pytest.py: error: the following arguments are required: ip\n'
 
 
 def test_parse_args() -> None:
@@ -157,7 +156,7 @@ def _format_network(value: str, expectedOutput: str) -> None:
 	assert n == expectedOutput
 
 
-def test_format_network() -> None:
+def test_format_network():
 	s = '[IPv4 Network] Private address\n' \
 	    'IP address      - 192.0.2.42\n' \
 	    'Network address - 192.0.2.0/24\n' \

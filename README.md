@@ -46,3 +46,7 @@ Other alternate supported inputs:
 * 1: Cannot parse IP
 * 2: List called with more than 2^8 IPs and not --force
 * 3: Called with -h (help)
+
+## Tests
+
+Run using `python3 -m pytest`
