@@ -1,9 +1,10 @@
 from distutils.core import setup
 setup(name='gip',
-	version='1.0.0',
+	version='1.0.2',
 	packages=['gip'],
-        author='Gunnar Guðvarðarson',
-        author_email='gunnar@meh.is',
-        url='https://git.system.is/meh/gip',
+	author='Gunnar Guðvarðarson',
+	author_email='gunnar@meh.is',
+	url='https://git.system.is/meh/gip',
+	scripts=['scripts/gip'],
 )
 
