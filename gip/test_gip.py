@@ -105,16 +105,17 @@ def _parse_args(expectedList: bool, expectedForce: bool, expectedIP, args) -> No
 	assert n2 == '/'.join(expectedIP)
 
 
-def test_parse_args_empty(capsys) -> None:
-	with test.raises(SystemExit):
-		_parse_args(args = [], expectedIP = [], expectedList = False, expectedForce = False)
-
-	out, err = capsys.readouterr()
-	capsys.disabled()
-
-	assert err is not None
-	assert err == 'usage: pytest.py [-h] [--list] [--force] ip [ip ...]\n' \
-	              'pytest.py: error: the following arguments are required: ip\n'
+# Can only be used in pytest 3.3.0+
+#def test_parse_args_empty(capsys) -> None:
+#	with test.raises(SystemExit):
+#		_parse_args(args = [], expectedIP = [], expectedList = False, expectedForce = False)
+#
+#	out, err = capsys.readouterr()
+#	capsys.disabled()
+#
+#	assert err is not None
+#	assert err == 'usage: pytest.py [-h] [--list] [--force] ip [ip ...]\n' \
+#	              'pytest.py: error: the following arguments are required: ip\n'
 
 
 def test_parse_args() -> None:
