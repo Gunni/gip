@@ -1,0 +1,27 @@
+#!/usr/local/bin python3
+
+import argparse
+import gip
+import sys
+
+if __name__ == '__main__':
+	args = gip.parse_args(sys.argv)
+	arg = gip.combine_args(args.ip)
+
+	try:
+		subnet = gip.parse_ip(arg)
+	except gip.CannotParseIPException as e:
+		print(e)
+		sys.exit(1)
+
+	if args.list:
+		try:
+			n = list_ips(subnet, args.force)
+			for ip in n:
+				print(ip)
+			sys.exit(0)
+		except gip.TooManyException as e:
+			print(e)
+			sys.exit(2)
+
+	print(gip.format_network(subnet), end = '')

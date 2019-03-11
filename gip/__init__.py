@@ -82,26 +82,3 @@ def parse_ip(arg: str) -> [IP.IPv4Interface, IP.IPv6Interface]:
 		return IP.ip_interface(arg)
 	except ValueError as e:
 		raise CannotParseIPException(str(e)) from e
-
-
-if __name__ == '__main__':
-	args = parse_args(sys.argv)
-	arg = combine_args(args.ip)
-
-	try:
-		subnet = parse_ip(arg)
-	except CannotParseIPException as e:
-		print(e)
-		sys.exit(1)
-
-	if args.list:
-		try:
-			n = list_ips(subnet, args.force)
-			for ip in n:
-				print(ip)
-			sys.exit(0)
-		except TooManyException as e:
-			print(e)
-			sys.exit(2)
-
-	print(format_network(subnet), end = '')
