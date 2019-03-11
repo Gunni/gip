@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
 	if args.list:
 		try:
-			n = list_ips(subnet, args.force)
+			n = gip.list_ips(subnet, args.force)
 			for ip in n:
 				print(ip)
 			sys.exit(0)
