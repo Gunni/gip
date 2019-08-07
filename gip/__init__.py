@@ -1,7 +1,35 @@
 #!/usr/bin/env python3
 
 import sys, argparse, ipaddress as IP
-from colorclass import Color
+import string
+
+class ColorFormatter(string.Formatter):
+	def __init__(self, enabled) -> None:
+		self.enabled = enabled
+
+	def get_value(self, key, args, kwds) -> str:
+		# Return the unmodified key still in braces if not a string key
+		if not isinstance(key, str):
+			return '{{{}}}'.format(key)
+
+		# If we are not enabled always return no color for specified key
+		if not self.enabled:
+			return ''
+
+		if key == 'red':
+			return '\033[31m'
+		if key == 'green':
+			return '\033[32m'
+		if key == 'magenta':
+			return '\033[35m'
+
+		if len(key) > 1 and key[0] == '/':
+			return '\033[m'
+
+		raise ValueError('Unsupported color: {}'.format(key))
+
+def Color(s) -> str:
+	return ColorFormatter(sys.stdout.isatty() or 'pytest' in sys.modules).format(s)
 
 class TooManyException(ValueError):
 	def __init__(self) -> ValueError:

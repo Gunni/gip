@@ -3,7 +3,6 @@ import gip
 import pytest as test
 import re
 import ipaddress as IP
-from colorclass import Color
 
 
 def _bits(net, expected) -> None:
@@ -39,7 +38,7 @@ def _key_val(inputA: str, inputB: object, inputC: str, expected: str) -> None:
 
 
 def _key_val_color(value) -> str:
-	return Color('{red}{}{/red}').format(value)
+	return '\033[31m{}\033[m'.format(value)
 
 
 def test_format_key_val() -> None:
