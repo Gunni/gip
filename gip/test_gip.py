@@ -1,8 +1,9 @@
 import gip
 
+import ipaddress as IP
 import pytest as test
 import re
-import ipaddress as IP
+import typing
 
 
 def _bits(net, expected) -> None:
@@ -126,7 +127,7 @@ def test_parse_args() -> None:
 	            args = ['192.0.2.1', '255.255.255.0'])
 
 
-def _parse_ip(value: str, expectedIP: [IP.IPv4Interface, IP.IPv6Interface]) -> None:
+def _parse_ip(value: str, expectedIP: typing.Union[IP.IPv4Interface, IP.IPv6Interface]) -> None:
 	n = gip.parse_ip(value)
 	assert n is not None
 	assert n == expectedIP
