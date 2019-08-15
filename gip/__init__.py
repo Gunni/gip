@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-import sys, argparse, ipaddress as IP
+import typing
+import argparse
+import ipaddress as IP
 import string
+import sys
 
 class ColorFormatter(string.Formatter):
 	def __init__(self, enabled) -> None:
@@ -32,14 +35,14 @@ def Color(s) -> str:
 	return ColorFormatter(sys.stdout.isatty() or 'pytest' in sys.modules).format(s)
 
 class TooManyException(ValueError):
-	def __init__(self) -> ValueError:
+	def __init__(self) -> None:
 		super(TooManyException, self).__init__('> 2^8 (256) addresses, refusing to print, force with --force')
 
 class CannotParseIPException(ValueError):
-	def __init__(self, message) -> ValueError:
+	def __init__(self, message) -> None:
 		super(CannotParseIPException, self).__init__(message)
 
-def decodeBits(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
+def decodeBits(net: typing.Union[IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	if net.network.is_multicast:   return 'Multicast'
 	if net.network.is_unspecified: return 'Unspecified'
 	if net.network.is_loopback:    return 'Loopback'
@@ -55,7 +58,7 @@ def formatKeyVal(key: str, value: object, pre: str = '') -> str:
 		value = Color('{red}{}{/red}').format(value)
 	)
 
-def format_network(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
+def format_network(net: typing.Union[IP.IPv4Interface, IP.IPv6Interface]) -> str:
 	res = ''
 
 	if net.version == 4:
@@ -85,7 +88,7 @@ def format_network(net: [IP.IPv4Interface, IP.IPv6Interface]) -> str:
 
 	return res
 
-def list_ips(net: [IP.IPv4Interface, IP.IPv6Interface], force: bool) -> [IP.IPv4Network, IP.IPv6Network]:
+def list_ips(net: typing.Union[IP.IPv4Interface, IP.IPv6Interface], force: bool) -> typing.Union[IP.IPv4Network, IP.IPv6Network]:
 	if net.network.num_addresses > 2 ** 8 and force == False:
 		raise TooManyException()
 
@@ -105,7 +108,7 @@ def combine_args(values) -> str:
 	return '/'.join(values)
 
 
-def parse_ip(arg: str) -> [IP.IPv4Interface, IP.IPv6Interface]:
+def parse_ip(arg: str) -> typing.Union[IP.IPv4Interface, IP.IPv6Interface]:
 	try:
 		return IP.ip_interface(arg)
 	except ValueError as e:

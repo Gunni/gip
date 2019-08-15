@@ -1,0 +1,17 @@
+image: python:3.6
+
+stages:
+- test
+
+before_script:
+- pip install mypy pytest .
+
+mypy:
+  stage: test
+  script:
+  - python -m mypy scripts/gip
+
+pytest:
+  stage: test
+  script:
+  - python gip/test_gip.py
